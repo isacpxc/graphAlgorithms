@@ -130,11 +130,48 @@ int main(){
 
     /*CATCHING NUMBER OF EDGES - END*/
 
+    /*SEPARATING EDGES AND WEIGHTS IN 2 FILES .TXT - START*/
 
+    
+    c = fgetc(instructions);
+    for (i=0;c==' ' || c == '\n';i++){  // move pointer to the start of the instructions of edges 
+        c = fgetc(instructions);
+        printf("%c", c);
+    }
 
-    printf("%s", nameG);
+    fopen("edges.txt", "a");  // creating .txt for the edges
+    FILE* edges_instructions = fopen("edges.txt", "w+"); // pointer for the edge file
+    char e = ' '; // receive char of the pointer of edges
 
-    fclose(instructions); // to close the file
+    fopen("edgesW.txt", "a"); // creating .txt for the edges
+    FILE* edges_weights = fopen("edgesW.txt", "w+"); // pointer for the edge file
+    char w = ' '; // receive char of the pointer of weights
+
+    int space_count = 0;
+    
+    for(i=0;c != EOF;){ // filter whats is edges and weights, sending to them respectives files
+        if (space_count <= 3) fprintf(edges_instructions, "%c", c);
+        if (space_count == 3) space_count = 0;
+        if (space_count == 2) {
+            c = fgetc(instructions);
+            while (c != ' ' && c!='\n') {
+                fprintf(edges_weights, "%c", c); 
+                c = fgetc(instructions);
+            }
+            space_count++;
+            fprintf(edges_instructions, "%c", '\n');
+            fprintf(edges_weights, "%c", '\n');
+        }
+        c = fgetc(instructions);
+        if (c == ' ') space_count++;
+    }
+    
+    fclose(instructions); // close entrada.txt
+    
+
+    /*SEPARATING EDGES AND WEIGHT IN 2 FILES .TXT - END*/
+
+    
 
     return 0;
 }
