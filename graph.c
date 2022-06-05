@@ -132,11 +132,10 @@ int main(){
 
     /*SEPARATING EDGES AND WEIGHTS IN 2 FILES .TXT - START*/
 
-    
+
     c = fgetc(instructions);
-    for (i=0;c==' ' || c == '\n';i++){  // move pointer to the start of the instructions of edges 
+    for (i=0;c==' ' || c == '\n';i++){  // move pointer to the start of the instructions of edges
         c = fgetc(instructions);
-        printf("%c", c);
     }
 
     fopen("edges.txt", "a");  // creating .txt for the edges
@@ -148,14 +147,14 @@ int main(){
     char w = ' '; // receive char of the pointer of weights
 
     int space_count = 0;
-    
+
     for(i=0;c != EOF;){ // filter whats is edges and weights, sending to them respectives files
         if (space_count <= 3) fprintf(edges_instructions, "%c", c);
         if (space_count == 3) space_count = 0;
         if (space_count == 2) {
             c = fgetc(instructions);
             while (c != ' ' && c!='\n') {
-                fprintf(edges_weights, "%c", c); 
+                fprintf(edges_weights, "%c", c);
                 c = fgetc(instructions);
             }
             space_count++;
@@ -165,13 +164,94 @@ int main(){
         c = fgetc(instructions);
         if (c == ' ') space_count++;
     }
-    
+
     fclose(instructions); // close entrada.txt
-    
+
 
     /*SEPARATING EDGES AND WEIGHT IN 2 FILES .TXT - END*/
+    rewind(edges_instructions);
+    rewind(edges_weights);
 
+
+    // CATCHING ALL EDGES VALUES IN MATRIX - START
     
+    space_count = 0;
+    steps = 0;
+    int current_position = 0;
+    double edgesM[3][qtdE];
+    fseek( edges_instructions, 0, SEEK_SET ); // 0 -> n-1
+    e = fgetc(edges_instructions);
+    int current_number = 0;
+
+    // inserindo arestas na matriz
+    for (int count_lines = 0;count_lines < qtdE;count_lines++){
+        for (;space_count<2;space_count++){
+
+            while (e != ' '){ // to the position of char 1 before -> after ' '
+                current_position++;
+                steps++;
+                e = fgetc(edges_instructions);
+            }
+            
+            
+            current_number = 0;
+            fseek(edges_instructions, (current_position-steps), SEEK_SET);
+
+            for (i = 0;i<steps;i++){
+                current_number+= pow(10, steps-i-1)*((int)fgetc(edges_instructions)-48);
+            }
+            edgesM[space_count][count_lines] = current_number;
+
+            current_position++;
+            fseek(edges_instructions, current_position, SEEK_SET);
+            steps = 0;
+            e = fgetc(edges_instructions);
+            
+            
+
+        }
+        space_count=0;
+        current_position+=2;
+        e = fgetc(edges_instructions);
+    }
+
+    // inserindo pesos na matriz
+    current_position = 0;
+    steps = 0;
+    e = fgetc(edges_weights);
+    for (int count_line=0;count_line<qtdE;count_line++){
+        while (e !='\n'){ // to the position of char 1 before -> after ' '                current_position++;
+            current_position++;
+            steps++;
+            e = fgetc(edges_weights);
+        }
+
+        current_number = 0;
+        fseek(edges_weights, (current_position-steps), SEEK_SET);
+        e = fgetc(edges_weights);
+        for (i = 0;i<steps;i++){
+            current_number+= pow(10, steps-i-1)*((int)e-48);
+        }
+        edgesM[2][count_line] = current_number;
+
+        current_position++;
+        fseek(edges_weights, current_position, SEEK_SET);
+        steps = 0;
+        e = fgetc(edges_weights);
+        e = fgetc(edges_weights);
+        current_position++;
+    }
+
+    // imprimir matriz
+    for (i=0;i<3;i++){
+        for (int j=0;j<qtdE;j++){
+            printf("%0.2f ", edgesM[i][j]);
+        }
+        printf("%c",'\n');
+    }
+    // CATCHING ALL EDGES VALUES IN MATRIX - END
+
+
 
     return 0;
 }
