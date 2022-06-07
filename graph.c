@@ -3,13 +3,7 @@
 #include <string.h>
 #include <locale.h>
 #include <math.h>
-
-struct graph {
-    int nameV;
-    char* name;
-    double weight;
-    struct graph* next;
-};
+#include "basicF.h"
 
 
 
@@ -31,7 +25,7 @@ int main(){
     int steps = 0; // steps in .txt
     int before = 0; //count number os steps until the number of vertex
     int i = 0;
-
+    
     /*CATCHING NAME - START*/
 
     do {  // this will catch how many decimal places the number has
@@ -174,7 +168,7 @@ int main(){
 
 
     // CATCHING ALL EDGES VALUES IN MATRIX - START
-    
+
     space_count = 0;
     steps = 0;
     int current_position = 0;
@@ -192,8 +186,8 @@ int main(){
                 steps++;
                 e = fgetc(edges_instructions);
             }
-            
-            
+
+
             current_number = 0;
             fseek(edges_instructions, (current_position-steps), SEEK_SET);
 
@@ -206,8 +200,8 @@ int main(){
             fseek(edges_instructions, current_position, SEEK_SET);
             steps = 0;
             e = fgetc(edges_instructions);
-            
-            
+
+
 
         }
         space_count=0;
@@ -243,15 +237,21 @@ int main(){
     }
 
     // imprimir matriz
-    for (i=0;i<3;i++){
-        for (int j=0;j<qtdE;j++){
-            printf("%0.2f ", edgesM[i][j]);
-        }
-        printf("%c",'\n');
-    }
+    // for (i=0;i<3;i++){
+    //     for (int j=0;j<qtdE;j++){
+    //         printf("%0.2f ", edgesM[i][j]);
+    //     }
+    //     printf("%c",'\n');
+    // }
+    
+
+
     // CATCHING ALL EDGES VALUES IN MATRIX - END
 
-
+    // creating adjacency list
+    lista_vertices* vertices;
+    vertices = create_adjList(qtdV, qtdE, edgesM);
+    
 
     return 0;
 }
