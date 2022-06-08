@@ -249,9 +249,10 @@ int main(){
     // CATCHING ALL EDGES VALUES IN MATRIX - END
 
     // creating adjacency list
-    lista_vertices* vertices;
-    vertices = create_adjList(qtdV, qtdE, edgesM);
     
+    // lista_vertices** vetor;
+    // vetor = create_adjList(qtdV, qtdE, edgesM); // ficar de olho no tipo recebido
+    create_adjList(qtdV, qtdE, edgesM);
 
     return 0;
 }
