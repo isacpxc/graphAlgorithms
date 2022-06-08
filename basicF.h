@@ -2,4 +2,6 @@
 
 typedef struct vertice* lista_vertices;
 
-lista_vertices* create_adjList(int, int, double (*)[*]);
+void create_adjList(int, int, double (*)[*]);
+size_t lengthInt(int);
+void putVerticeName(struct vertice*,int);
