@@ -52,6 +52,17 @@ int verifyPosition(int current, int ok[], int tam){
   return 0;
 }
 
+int arrowNumber(int current,int qtdE, double edgeM[][qtdE]){
+  int arrows = 0;
+  for (int i=0;i<qtdE;i++){
+    if (current == (int)edgeM[0][i]){
+      arrows++;
+    }
+  }
+
+  return arrows;
+}
+
 void create_adjList(int qtdV,int qtdE, double edgeM[][qtdE]) { // por enquanto vai ficar void
 
   /* 
@@ -110,10 +121,45 @@ void create_adjList(int qtdV,int qtdE, double edgeM[][qtdE]) { // por enquanto v
       
     }
   
-  
 
   } //end for
   // agora a lista esta iniciada, cada vertice inserido na primeira posição
+
+  //creating adjacency list of each vertex
+  int arrows = 0;
+  
+  
+  // (*vetor[0])->next = (struct vertice*)malloc(sizeof(struct vertice)); // começo do loop
+  // (*vetor[0])->next->nameV = 333;
+  // store = (*vetor[0])->next;
+  // store->next = (struct vertice*)malloc(sizeof(struct vertice));
+  // store->next->nameV = 222;
+  // printf("%i", (*vetor[0])->next->nameV);
+  // printf("%i", (*vetor[0])->next->next->nameV);
+  struct vertice* store = (struct vertice*)malloc(sizeof(struct vertice));
+  for (int i = 0;i<qtdV;i++){ // abrindo espaço para listas
+    arrows = arrowNumber((*vetor[i])->nameV, qtdE, edgeM); // inicio loop de vertices
+    for (size_t space = 0; space < arrows; space++){
+      if (space == 0){
+        (*vetor[i])->next = (struct vertice*)malloc(sizeof(struct vertice));
+        store = (*vetor[i])->next;
+      } else {
+        store->next = (struct vertice*)malloc(sizeof(struct vertice));
+        store = store->next;
+      }
+
+    }
+  }
+
+  free(store);
+
+  // agora temos com os espaços abertos, vamos preencher cada lista com os dados
+  // primeiro fazer para a posição 0 do vetor
+  
+  
+
+  
+
   // for (int i=0;i<qtdV;i++) {
   //   printf("vertice: %s\n", (*vetor[i])->name);
   //   printf("vertice numero: %d\n", (*vetor[i])->nameV);
