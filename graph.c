@@ -8,6 +8,9 @@
 
 
 int main(){
+
+    setlocale(LC_ALL,"portuguese");
+
     FILE *instructions;  //will receive the .txt
     char c = 'a';
     int qtdV = 0; // number of vertices

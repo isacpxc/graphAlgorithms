@@ -149,22 +149,57 @@ void create_adjList(int qtdV,int qtdE, double edgeM[][qtdE]) { // por enquanto v
       }
 
     }
+    store->next = NULL;
   }
+for (int vertex=0;vertex<qtdV;vertex++){ //quem é cu?
+  store = (*vetor[vertex])->next; 
+  struct vertice* previous = (struct vertice*)malloc(sizeof(struct vertice));
+  previous = (*vetor[vertex]);
+    for (int i=0;i<qtdE || store!=NULL ;i++){  //esse 0 será dinâmico
+      if (edgeM[0][i] == (*vetor[vertex])->nameV){
+        store->back = previous;
+        store->nameV = edgeM[1][i];
+        putVerticeName(store, store->nameV);
 
-  free(store);
+        if (store != NULL){
+          int pass=i+1;
+          for (int j=0;j==0;pass++){
+            if (edgeM[0][pass] == (*vetor[vertex])->nameV){
+              store->weight = edgeM[2][pass];
+              
+              j = 1;
+            }
+          }
+        }
+        if (store->next == NULL) store->weight = 0.505303404;
+        previous = store;
+        store = store->next; 
+      }
+    }
+}
 
-  // agora temos com os espaços abertos, vamos preencher cada lista com os dados
-  // primeiro fazer para a posição 0 do vetor
+for (size_t i=0;i<qtdV;i++){  // visualização
+  store = (*vetor[i]); 
+  printf("\n\n=====LISTA DE ADJ DO VÉRTICE %i=====", i+1);
+  for (;store != NULL;){
+    printf("\nDADOS:\n");
+    printf("name: %s\n",store->name);
+    printf("nameV: %i\n",store->nameV);
+    printf("weight: %0.2f\n\n",store->weight);
+    store = store->next;
+  }
+}
+
+free(store);
+
+system("pause");
+
+
   
   
 
   
 
-  // for (int i=0;i<qtdV;i++) {
-  //   printf("vertice: %s\n", (*vetor[i])->name);
-  //   printf("vertice numero: %d\n", (*vetor[i])->nameV);
-  //   printf("vertice peso: %0.2f\n\n", (*vetor[i])->weight);
-  // } verificação apenas
 
   
   //            -----vetor------
