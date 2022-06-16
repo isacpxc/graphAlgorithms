@@ -3,6 +3,10 @@
 #include <math.h>
 #include "basicF.h"
 #include <string.h>
+#include "helpers.h"
+#include <stdbool.h>
+
+
 
 // graph's basic functions and struct
 struct vertice{
@@ -11,59 +15,11 @@ struct vertice{
   double weight;
   struct vertice* next;
   struct vertice* back;
-};
+}; // WARNING! se mudar aqui mude em todos os .c, onde struct vertice é definido
 
-size_t lengthInt(int number){
-  size_t tam = 0;
-  // doublw
-  for (int i=0, index = 0;i<1;index++){
-    if ( ((double)number/pow(10, index)) >= 1) tam++;
-    else i++;
-  }
 
-  return tam;
-}
 
-void putVerticeName(struct vertice* v,int number){
-  size_t tam = lengthInt(number);
-  
-  char charN[tam];
-  v->name = (char*)malloc((tam+2)*sizeof(char));
-
-  sprintf(charN, "%d", number);  // put number on char vector
-  
-
-  for (int i=0;i<tam+1;i++){
-    if (i == 0) v->name[i] = 'v';
-    else v->name[i] = charN[i-1];
-  }
-  v->name[tam+2] = '\0';
-
-  // printf("%s \n", v->name);
-  // printf("aqui esta o nome: %x ", v->name);
-
-}
-
-int verifyPosition(int current, int ok[], int tam){
-  int check = 0;
-  for (int i=0;i<tam;i++){
-    if (ok[i] == current) return 1;
-  }
-  return 0;
-}
-
-int arrowNumber(int current,int qtdE, double edgeM[][qtdE]){
-  int arrows = 0;
-  for (int i=0;i<qtdE;i++){
-    if (current == (int)edgeM[0][i]){
-      arrows++;
-    }
-  }
-
-  return arrows;
-}
-
-void create_adjList(int qtdV,int qtdE, double edgeM[][qtdE]) { // por enquanto vai ficar void
+lista_vertices** create_adjList(int qtdV,int qtdE, double edgeM[][qtdE]) { // por enquanto vai ficar void
 
   /* 
   ESTUDO DE PONTEIROS
@@ -178,27 +134,22 @@ for (int vertex=0;vertex<qtdV;vertex++){ //quem é cu?
     }
 }
 
-for (size_t i=0;i<qtdV;i++){  // visualização
-  store = (*vetor[i]); 
-  printf("\n\n=====LISTA DE ADJ DO VÉRTICE %i=====", i+1);
-  for (;store != NULL;){
-    printf("\nDADOS:\n");
-    printf("name: %s\n",store->name);
-    printf("nameV: %i\n",store->nameV);
-    printf("weight: %0.2f\n\n",store->weight);
-    store = store->next;
-  }
-}
+// for (size_t i=0;i<qtdV;i++){  // visualização
+//   store = (*vetor[i]); 
+//   printf("\n\n=====LISTA DE ADJ DO VÉRTICE %i=====", i+1);
+//   for (;store != NULL;){
+//     printf("\nDADOS:\n");
+//     printf("name: %s\n",store->name);
+//     printf("nameV: %i\n",store->nameV);
+//     printf("weight: %0.2f\n\n",store->weight);
+//     store = store->next;
+//   }
+// }
 
 free(store);
 
-system("pause");
+return vetor;
 
-
-  
-  
-
-  
 
 
   
@@ -221,3 +172,39 @@ system("pause");
 }
 
 
+void Grafo(lista_vertices** vetor, int qtdV){
+
+  lista_vertices store = (lista_vertices)malloc(sizeof(struct vertice));
+  printf("=====LISTAS DE ADJACÊNCIA=====");
+  for (size_t i=0;i<qtdV;i++){
+    store = (*vetor[i]);
+    printf("\n\n*v%i\n",store->nameV);
+    while (store!=NULL)
+    {
+      if (store->next != NULL) printf("[v%i]==>", store->nameV);
+      else printf("[v%i]", store->nameV);
+      store = store->next;
+    }
+
+  }
+  printf("\n\n");
+}
+
+
+int Evertice(lista_vertices** vetor, int v, int qtdV){
+  
+  bool conf = false;
+  int count = 0;
+  while ( (count != qtdV) && (conf == false) )
+  {
+    if ((*vetor[count])->nameV == v) conf = true;
+    else count++;
+  }
+  if (conf == true) 1;
+  else 0;
+  
+}
+
+int AddAresta(lista_vertices** vetor, int vi, int vj,int w, int qtdV){
+  // will return 1 or 0; success or fail
+}
