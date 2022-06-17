@@ -1,0 +1,27 @@
+novoGrafo: /*chamado aqui de create_adjList*/  PARTIAL
+Grafo: YES
+EVertice: YES
+AddAresta: NO
+RemoveAresta: NO
+ExisteAresta: NO
+MudaPeso: NO
+ImprimeGrafo: NO
+RemoveGrafo: NO
+RecuperaPeso: NO
+GrafoSimples: NO
+EArvore: NO
+EBipartido: NO
+Complemeto: NO
+Eadj: NO
+Adjacencia: NO
+Incidencia: NO
+MatrizAdj: NO
+ImprimeMatriz: NO
+Conexo: NO 
+
+DFS: NO
+BFS: NO
+
+CaminhoMinimo: NO
+CustoMinimo: NO
+CaminhoMinimo2: NO
