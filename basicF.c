@@ -51,16 +51,21 @@ lista_vertices** create_adjList(int qtdV,int qtdE, double edgeM[][qtdE]) { // po
   lista_vertices** vetor = (lista_vertices**)malloc(qtdV*sizeof(lista_vertices*));
 
   // printf("vertice: %d\n", (*vetor[1])->nameV);
+  int*  arrVOinddex= (int*)malloc(qtdV*sizeof(int));
+  putVerticeIndex(arrVOinddex);
+  //   for (size_t i = 0; i < qtdV; i++)
+  // {
+  //   printf("%i ",arrVOinddex[i]);
+  // }
   
-
   // v[0] ja esta na primeira posição, agora vamos preencher as posições restantes, iniciando uma lista para cada vértice
   // a ideia é criar um vetor, que armazena o numero do vertice que ja foi inserido na lista
   // ex vec = [1,-1,-1,-1,-1,-1,-1] o grafo tem 7 vertices, o primeiro é o 1
   // aqui não vamos montar a lista ainda, apenas colocar o vertice no início da lista
   int ok[qtdV];
   for (int i=0;i<qtdV;i++) ok[i] = -1;
-  
-  for (int i=0,indexOk=0;i<qtdE;i++){
+  int indexOk=0;
+  for (int i=0;i<qtdE;i++){
     if (verifyPosition(edgeM[0][i], ok, qtdV) == 0){ // if verifyPosition return 0, this vertice don't belong yet
       struct vertice* v_current = (struct vertice*)malloc(sizeof(struct vertice));
       v_current->back = NULL;
@@ -79,18 +84,54 @@ lista_vertices** create_adjList(int qtdV,int qtdE, double edgeM[][qtdE]) { // po
   
 
   } //end for
-  // agora a lista esta iniciada, cada vertice inserido na primeira posição
+  
+    for (int i=0;i<qtdE;i++){
+      
+    if (verifyPosition(edgeM[1][i], ok, qtdV) == 0){ // if verifyPosition return 0, this vertice don't belong yet
+      printf("%f \n", edgeM[1][i]);
+      struct vertice* v_current = (struct vertice*)malloc(sizeof(struct vertice));
+      v_current->back = NULL;
+      v_current->next = NULL;
+      v_current->nameV = edgeM[1][i];
+      putVerticeName(v_current, v_current->nameV);
+      v_current->weight = 0.505303404;
+      lista_vertices* elemento_current = (lista_vertices*)malloc(sizeof(lista_vertices));
+      *elemento_current = v_current;
+      ok[indexOk] = edgeM[1][i];
+      vetor[indexOk] = elemento_current;
+      indexOk++;
+      
+    }
+  
 
+  } //end for
+
+  for (int index=0;index<qtdV;index++){
+    if (verifyDiconVertex(qtdE, arrVOinddex[index], edgeM) > -1){
+      struct vertice* v_current = (struct vertice*)malloc(sizeof(struct vertice));
+      v_current->back = NULL;
+      v_current->next = NULL;
+      v_current->nameV = arrVOinddex[index];
+      putVerticeName(v_current, v_current->nameV);
+      v_current->weight = 0.505303404;
+      lista_vertices* elemento_current = (lista_vertices*)malloc(sizeof(lista_vertices));
+      *elemento_current = v_current;
+      
+      vetor[indexOk] = elemento_current;
+      indexOk++;
+    }
+  }
+  // agora a lista esta iniciada, cada vertice inserido na primeira posição
+  // for (int i=0;i<qtdV;i++) printf("%i", (*vetor[i])->nameV);
   //creating adjacency list of each vertex
   int arrows = 0;
-  
   
   // (*vetor[0])->next = (struct vertice*)malloc(sizeof(struct vertice)); // começo do loop
   // (*vetor[0])->next->nameV = 333;
   // store = (*vetor[0])->next;
   // store->next = (struct vertice*)malloc(sizeof(struct vertice));
   // store->next->nameV = 222;
-  // printf("%i", (*vetor[0])->next->nameV);
+  // for (int i=0;i<qtdV;i++) printf("%i ", (*vetor[i])->nameV);
   // printf("%i", (*vetor[0])->next->next->nameV);
   struct vertice* store = (struct vertice*)malloc(sizeof(struct vertice));
   for (int i = 0;i<qtdV;i++){ // abrindo espaço para listas
@@ -200,11 +241,92 @@ int Evertice(lista_vertices** vetor, int v, int qtdV){
     if ((*vetor[count])->nameV == v) conf = true;
     else count++;
   }
-  if (conf == true) 1;
-  else 0;
+  
+  return conf;
   
 }
 
+
+
+int ExisteAresta(lista_vertices** vetor, int vi, int vj,double w, int qtdV){
+  // -1 = não existe um dos vértices aresta vi->vj
+  // 0 = os vértices existem, mas não a aresta
+  // 1 = existe a aresta vi->vj, mas não com o peso w
+  // 2 = existe a aresta vi->vj com peso
+  if (Evertice(vetor, vi, qtdV) == 0 || Evertice(vetor, vj, qtdV) == 0) return -1;
+  lista_vertices store = (lista_vertices)malloc(sizeof(struct vertice));
+  int i= -1;
+  int conf = 0;
+
+  do{
+    i++;
+    store = (*vetor[i]);
+  }while((*vetor[i])->nameV != vi);
+  
+  while (store->next!=NULL)
+  {
+    if (store->next->nameV == vj) {
+      conf = 1;
+      if (store->weight == w) conf = 2;
+      return conf;
+    } else store = store->next;
+  }
+  
+  return conf;
+}
+
+int Eadj(lista_vertices** vetor, int vi, int vj, int qtdV){
+  int conf = ExisteAresta(vetor, vi, vj, 0, qtdV);
+  if ( conf > 0) return 1;
+  return 0;
+}
+
 int AddAresta(lista_vertices** vetor, int vi, int vj,int w, int qtdV){
-  // will return 1 or 0; success or fail
+  if(Evertice(vetor,vi,qtdV) == 0 || Evertice(vetor, vj, qtdV) == 0) return -1;
+  if(Evertice(vetor,vi,qtdV) == 1 && Evertice(vetor, vj, qtdV) == 1) {
+    if (ExisteAresta(vetor, vi, vj, 0, qtdV) != 0) return 0;
+  }
+  lista_vertices store = (lista_vertices)malloc(sizeof(struct vertice));
+  lista_vertices previous = (lista_vertices)malloc(sizeof(struct vertice));
+  int i= -1;
+  int conf = 0;
+
+  do{
+    i++;
+    store = (*vetor[i]);
+    previous = (*vetor[i]);
+  }while((*vetor[i])->nameV != vi);
+  
+  if (store->next == NULL){ // se só tiver um vértice na lista
+    store->next = (struct vertice*)malloc(sizeof(struct vertice));
+    store->next->back = (*vetor[i]);
+    store->next->nameV = vj;
+    store->next->next = NULL;
+    store->next->weight = w;
+  } else {
+    while (store->next->next!=NULL) { 
+      previous = store;
+      store = store->next;
+    }
+    store->next->next = (struct vertice*)malloc(sizeof(struct vertice));
+    // printf("vertice name: %i\n", previous->nameV);
+    store->next->next->back = previous->next;
+    store->next->next->nameV = vj;
+    store->next->next->next = NULL;
+    store->next->next->weight = w;
+    putVerticeName(store->next->next, vj);
+
+  }
+  
+  // printf("\n\n");
+  // printf("vertice name: %s\n", (*vetor[1])->next->next->back->name);
+  // printf("vertice number: %i\n", (*vetor[1])->next->next->back->nameV);
+  // printf("\n\n");
+
+  return 1;
+  
+
+  // -1 = um dos vértices não existe
+  // 0 = aresta ja existe
+  // 1 = aresta adicionada
 }
