@@ -266,7 +266,7 @@ int main(){
     // lista_vertices** vetor;
     // vetor = create_adjList(qtdV, qtdE, edgesM); // ficar de olho no tipo recebido
     lista_vertices** vetor = create_adjList(qtdV, qtdE, edgesM);
-   //  Grafo(vetor, qtdV);  // FUNCTION
+    Grafo(vetor, qtdV);  // FUNCTION
     // printf("Insira o número do vértice: ");
     // int v = 0;
     // scanf("%d",&v);
