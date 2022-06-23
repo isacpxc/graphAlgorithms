@@ -4,6 +4,7 @@
 #include <locale.h>
 #include <math.h>
 #include "basicF.h"
+#include <stdbool.h>
 
 
 
@@ -72,19 +73,20 @@ int main(){
     before++;
 
     instructions = fopen("entrada.txt", "r"); // reset pointer to the start of the file
-
+    int lengthV = 0;
     while (i < before + steps) { // nV will receive an string with the number referent to the number of vertices
         if (i >= before) {
             c = getc(instructions);
             nV[i - before] = c;
+            lengthV++;
         } else {
             c = getc(instructions);
         }
         i++;
     }
 
-
-    for (int i=0, index = strlen(nV)-1;i<steps;i++, index--){
+    //strlen deu problema, por isso usei uma var lengthV
+    for (int i=0, index = lengthV-1;i<steps;i++, index--){
         qtdV+= pow(10, index)*((int)nV[i]-48);
     }
 
@@ -111,17 +113,19 @@ int main(){
 
     instructions = fopen("entrada.txt", "r"); // reset pointer to the start of the file
 
+    int lengthE = 0;
     while (i < before + steps) { // nE will receive an string with the number referent to the number of vertices
         if (i >= before) {
             c = getc(instructions);
             nE[i - before] = c;
+            lengthE++;
         } else {
             c = getc(instructions);
         }
         i++;
     }
-
-    for (int i=0, index = strlen(nE)-1;i<steps;i++, index--){
+    
+    for (int i=0, index = lengthE-1;i<steps;i++, index--){
         qtdE+= pow(10, index)*((int)nE[i]-48);
     }
 
@@ -138,6 +142,8 @@ int main(){
     fopen("edges.txt", "a");  // creating .txt for the edges
     FILE* edges_instructions = fopen("edges.txt", "w+"); // pointer for the edge file
     char e = ' '; // receive char of the pointer of edges
+    FILE* edges_instructionsEnd = fopen("edges.txt", "w+");
+    char ee = ' '; 
 
     fopen("edgesW.txt", "a"); // creating .txt for the edges
     FILE* edges_weights = fopen("edgesW.txt", "w+"); // pointer for the edge file
@@ -179,25 +185,29 @@ int main(){
     fseek( edges_instructions, 0, SEEK_SET ); // 0 -> n-1
     e = fgetc(edges_instructions);
     int current_number = 0;
-
+    int disconnect=0;
     // inserindo arestas na matriz
-    for (int count_lines = 0;count_lines < qtdE;count_lines++){
+    for (int count_columns = 0;count_columns < qtdE;count_columns++){
         for (;space_count<2;space_count++){
-
-            while (e != ' '){ // to the position of char 1 before -> after ' '
+            
+            while (e != ' ' && e!='\n'){ // to the position of char 1 before -> after ' '
                 current_position++;
                 steps++;
                 e = fgetc(edges_instructions);
             }
-
-
+            if (e == '\n') disconnect++;
+            else disconnect=0;
+            
             current_number = 0;
             fseek(edges_instructions, (current_position-steps), SEEK_SET);
 
             for (i = 0;i<steps;i++){
                 current_number+= pow(10, steps-i-1)*((int)fgetc(edges_instructions)-48);
             }
-            edgesM[space_count][count_lines] = current_number;
+            
+            
+            if (!disconnect) edgesM[space_count][count_columns] = current_number;
+            else {space_count++;count_columns--;current_position--;}
 
             current_position++;
             fseek(edges_instructions, current_position, SEEK_SET);
@@ -250,18 +260,22 @@ int main(){
 
 
     // CATCHING ALL EDGES VALUES IN MATRIX - END
-
+    
     // creating adjacency list
     
     // lista_vertices** vetor;
     // vetor = create_adjList(qtdV, qtdE, edgesM); // ficar de olho no tipo recebido
     lista_vertices** vetor = create_adjList(qtdV, qtdE, edgesM);
-    // Grafo(vetor, qtdV);  // FUNCTION
+   //  Grafo(vetor, qtdV);  // FUNCTION
     // printf("Insira o número do vértice: ");
     // int v = 0;
     // scanf("%d",&v);
-    // Evertice(vetor, v, qtdV); // FUNCTION
-    
+    // printf("%i",Evertice(vetor, 3, qtdV)); // FUNCTION
+    // printf("%i", ExisteAresta(vetor, 4, 2, 2, qtdV)); //FUNCTION
+    // printf("%i", Eadj(vetor, 4, 2,qtdV));
+    // AddAresta(vetor, 5, 3, 55, qtdV);
+    // qtdE++;
+    // Grafo(vetor, qtdV);
 
     system("pause");
     return 0;
