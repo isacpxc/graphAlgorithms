@@ -1,9 +1,10 @@
 novoGrafo: /*chamado aqui de create_adjList*/  PARTIAL
 Grafo: YES
 EVertice: YES
+ExisteAresta: YES
+Eadj: YES
 AddAresta: NO
 RemoveAresta: NO
-ExisteAresta: NO
 MudaPeso: NO
 ImprimeGrafo: NO
 RemoveGrafo: NO
@@ -12,7 +13,6 @@ GrafoSimples: NO
 EArvore: NO
 EBipartido: NO
 Complemeto: NO
-Eadj: NO
 Adjacencia: NO
 Incidencia: NO
 MatrizAdj: NO
