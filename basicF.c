@@ -301,6 +301,7 @@ int AddAresta(lista_vertices** vetor, int vi, int vj,int w, int qtdV){
     store->next = (struct vertice*)malloc(sizeof(struct vertice));
     store->next->back = (*vetor[i]);
     store->next->nameV = vj;
+    putVerticeName(store->next, store->next->nameV);
     store->next->next = NULL;
     store->next->weight = w;
   } else {
@@ -312,15 +313,19 @@ int AddAresta(lista_vertices** vetor, int vi, int vj,int w, int qtdV){
     // printf("vertice name: %i\n", previous->nameV);
     store->next->next->back = previous->next;
     store->next->next->nameV = vj;
+    putVerticeName(store->next->next, vj);
     store->next->next->next = NULL;
     store->next->next->weight = w;
-    putVerticeName(store->next->next, vj);
 
   }
   
   // printf("\n\n");
-  // printf("vertice name: %s\n", (*vetor[1])->next->next->back->name);
-  // printf("vertice number: %i\n", (*vetor[1])->next->next->back->nameV);
+  // printf("vertice number: %i\n", (*vetor[2])->next->nameV);
+  // printf("vertice name: %s\n", (*vetor[2])->next->name);
+  // printf("\n\n");
+  // printf("\n\n");
+  // printf("vertice number: %i\n", (*vetor[2])->next->next->back->nameV);
+  // printf("vertice name: %s\n", (*vetor[2])->next->next->back->name);
   // printf("\n\n");
 
   return 1;
