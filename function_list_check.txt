@@ -3,7 +3,7 @@ Grafo: YES
 EVertice: YES
 ExisteAresta: YES
 Eadj: YES
-AddAresta: NO
+AddAresta: YES
 RemoveAresta: NO
 MudaPeso: NO
 ImprimeGrafo: NO
