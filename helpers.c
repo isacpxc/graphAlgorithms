@@ -26,7 +26,7 @@ void putVerticeName(struct vertice* v,int number){
   size_t tam = lengthInt(number);
   
   char charN[tam];
-  v->name = (char*)malloc((tam+2)*sizeof(char));
+  v->name = (char*)malloc((tam+1)*sizeof(char));
 
   sprintf(charN, "%d", number);  // put number on char vector
   
