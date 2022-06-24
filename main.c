@@ -273,9 +273,10 @@ int main(){
     // printf("%i",Evertice(vetor, 3, qtdV)); // FUNCTION
     // printf("%i", ExisteAresta(vetor, 4, 2, 2, qtdV)); //FUNCTION
     // printf("%i", Eadj(vetor, 4, 2,qtdV));
-    // AddAresta(vetor, 5, 3, 55, qtdV);
+    AddAresta(vetor, 3, 5, 3, qtdV);
     // qtdE++;
-    // Grafo(vetor, qtdV);
+    printf("\n\nDEPOIS=========\n\n");
+    Grafo(vetor, qtdV);
 
     system("pause");
     return 0;
