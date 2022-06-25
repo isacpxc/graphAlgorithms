@@ -7,8 +7,12 @@ struct vertice{
   int nameV;
   char* name;
   double weight;
+  int visited;
   struct vertice* next;
   struct vertice* back;
+  int neighbours;
+  struct vertice** neighboursLink;
+  double* weightLink ;
 };
 
 size_t lengthInt(int number){
