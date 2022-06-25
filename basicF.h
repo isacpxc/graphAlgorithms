@@ -11,3 +11,5 @@ int AddAresta(lista_vertices** graph, int vi, int vj, int w, int qtdV);
 int ExisteAresta(lista_vertices** vetor, int vi, int vj,double w, int qtdV);
 int Eadj(lista_vertices** vetor, int vi, int vj, int qtdV);
 int AddAresta(lista_vertices** vetor, int vi, int vj,int w, int qtdV);
+void Grafo2(lista_vertices** vetor, int qtdV);
+// void teste(struct vertice** v);

@@ -13,8 +13,12 @@ struct vertice{
   int nameV;
   char* name;
   double weight;
+  int visited;
   struct vertice* next;
   struct vertice* back;
+  int neighbours;
+  struct vertice** neighboursLink;
+  double* weightLink ;
 }; // WARNING! se mudar aqui mude em todos os .c, onde struct vertice é definido
 
 
@@ -52,7 +56,7 @@ lista_vertices** create_adjList(int qtdV,int qtdE, double edgeM[][qtdE]) { // po
 
   // printf("vertice: %d\n", (*vetor[1])->nameV);
   int*  arrVOinddex= (int*)malloc(qtdV*sizeof(int));
-  putVerticeIndex(arrVOinddex);
+  putVerticeIndex(arrVOinddex); // array with all vertices indexes| CAUSE: to create adj list to disconnected vertices
   //   for (size_t i = 0; i < qtdV; i++)
   // {
   //   printf("%i ",arrVOinddex[i]);
@@ -73,6 +77,8 @@ lista_vertices** create_adjList(int qtdV,int qtdE, double edgeM[][qtdE]) { // po
       v_current->nameV = edgeM[0][i];
       putVerticeName(v_current, v_current->nameV);
       v_current->weight = edgeM[2][i];
+      v_current->visited = -1;
+      v_current->neighbours = 0;
       lista_vertices* elemento_current = (lista_vertices*)malloc(sizeof(lista_vertices));
       *elemento_current = v_current;
       
@@ -87,21 +93,23 @@ lista_vertices** create_adjList(int qtdV,int qtdE, double edgeM[][qtdE]) { // po
   
     for (int i=0;i<qtdE;i++){
       
-    if (verifyPosition(edgeM[1][i], ok, qtdV) == 0){ // if verifyPosition return 0, this vertice don't belong yet
-      printf("%f \n", edgeM[1][i]);
-      struct vertice* v_current = (struct vertice*)malloc(sizeof(struct vertice));
-      v_current->back = NULL;
-      v_current->next = NULL;
-      v_current->nameV = edgeM[1][i];
-      putVerticeName(v_current, v_current->nameV);
-      v_current->weight = 0.505303404;
-      lista_vertices* elemento_current = (lista_vertices*)malloc(sizeof(lista_vertices));
-      *elemento_current = v_current;
-      ok[indexOk] = edgeM[1][i];
-      vetor[indexOk] = elemento_current;
-      indexOk++;
-      
-    }
+      if (verifyPosition(edgeM[1][i], ok, qtdV) == 0){ // if verifyPosition return 0, this vertice don't belong yet
+        printf("%f \n", edgeM[1][i]);
+        struct vertice* v_current = (struct vertice*)malloc(sizeof(struct vertice));
+        v_current->back = NULL;
+        v_current->next = NULL;
+        v_current->nameV = edgeM[1][i];
+        putVerticeName(v_current, v_current->nameV);
+        v_current->weight = 0.505303404;
+        v_current->visited = -1;
+        v_current->neighbours = 0;
+        lista_vertices* elemento_current = (lista_vertices*)malloc(sizeof(lista_vertices));
+        *elemento_current = v_current;
+        ok[indexOk] = edgeM[1][i];
+        vetor[indexOk] = elemento_current;
+        indexOk++;
+        
+      }
   
 
   } //end for
@@ -112,6 +120,8 @@ lista_vertices** create_adjList(int qtdV,int qtdE, double edgeM[][qtdE]) { // po
       v_current->back = NULL;
       v_current->next = NULL;
       v_current->nameV = arrVOinddex[index];
+      v_current->visited = -1;
+      v_current->neighbours = 0;
       putVerticeName(v_current, v_current->nameV);
       v_current->weight = 0.505303404;
       lista_vertices* elemento_current = (lista_vertices*)malloc(sizeof(lista_vertices));
@@ -136,7 +146,9 @@ lista_vertices** create_adjList(int qtdV,int qtdE, double edgeM[][qtdE]) { // po
   struct vertice* store = (struct vertice*)malloc(sizeof(struct vertice));
   for (int i = 0;i<qtdV;i++){ // abrindo espaço para listas
     arrows = arrowNumber((*vetor[i])->nameV, qtdE, edgeM); // inicio loop de vertices
+    (*vetor[i])->neighboursLink = (struct vertice**)malloc(arrows*sizeof(struct vertice*));
     for (size_t space = 0; space < arrows; space++){
+      (*vetor[i])->neighbours++;
       if (space == 0){
         (*vetor[i])->next = (struct vertice*)malloc(sizeof(struct vertice));
         store = (*vetor[i])->next;
@@ -148,7 +160,7 @@ lista_vertices** create_adjList(int qtdV,int qtdE, double edgeM[][qtdE]) { // po
     }
     store->next = NULL;
   }
-for (int vertex=0;vertex<qtdV;vertex++){ //quem é cu?
+for (int vertex=0;vertex<qtdV;vertex++){ 
   store = (*vetor[vertex])->next; 
   struct vertice* previous = (struct vertice*)malloc(sizeof(struct vertice));
   previous = (*vetor[vertex]);
@@ -157,7 +169,7 @@ for (int vertex=0;vertex<qtdV;vertex++){ //quem é cu?
         store->back = previous;
         store->nameV = edgeM[1][i];
         putVerticeName(store, store->nameV);
-
+        // store->visited = -1;
         if (store != NULL){
           int pass=i+1;
           for (int j=0;j==0;pass++){
@@ -186,6 +198,37 @@ for (int vertex=0;vertex<qtdV;vertex++){ //quem é cu?
 //     store = store->next;
 //   }
 // }
+
+for (int index=0;index<qtdV;index++){ //neighboursLink to NULL
+  struct vertice* store = (struct vertice*)malloc(sizeof(struct vertice));
+  store = (*vetor[index]);
+  if ((*vetor[index])->neighbours == 0) (*vetor[index])->neighboursLink[0] = NULL;
+  for (int i=0;i<(*vetor[index])->neighbours;i++){
+    store = store->next;
+    int j=0;
+    while (store->nameV != (*vetor[j])->nameV) {
+      j++;
+    }
+    (*vetor[index])->neighboursLink[i] = NULL;
+
+  }
+}
+
+for (int index=0;index<qtdV;index++){ // neighboursLink TO NEIGHBOURS
+  struct vertice* store = (struct vertice*)malloc(sizeof(struct vertice));
+  store = (*vetor[index]);
+  for (int i=0;i<(*vetor[index])->neighbours;i++){
+    store = store->next;
+    int j=0;
+    while (store->nameV != (*vetor[j])->nameV) {
+      j++;
+    }
+    (*vetor[index])->neighboursLink[i] = (*vetor[j]);
+    // printf("\nname: %i",(*vetor[index])->neighboursLink[i]->nameV);
+
+  }
+
+}
 
 free(store);
 
@@ -219,7 +262,7 @@ void Grafo(lista_vertices** vetor, int qtdV){
   printf("=====LISTAS DE ADJACÊNCIA=====");
   for (size_t i=0;i<qtdV;i++){
     store = (*vetor[i]);
-    printf("\n\n*v%i\n",store->nameV);
+    printf("\n\n*v%i - n = %i\n",store->nameV,(*vetor[i])->neighbours);
     while (store!=NULL)
     {
       if (store->next != NULL) printf("[v%i]==>", store->nameV);
@@ -286,6 +329,7 @@ int AddAresta(lista_vertices** vetor, int vi, int vj,int w, int qtdV){
   if(Evertice(vetor,vi,qtdV) == 1 && Evertice(vetor, vj, qtdV) == 1) {
     if (ExisteAresta(vetor, vi, vj, 0, qtdV) != 0) return 0;
   }
+  
   lista_vertices store = (lista_vertices)malloc(sizeof(struct vertice));
   lista_vertices previous = (lista_vertices)malloc(sizeof(struct vertice));
   int i= -1;
@@ -297,6 +341,12 @@ int AddAresta(lista_vertices** vetor, int vi, int vj,int w, int qtdV){
     previous = (*vetor[i]);
   }while((*vetor[i])->nameV != vi);
   
+  (*vetor[i])->neighbours++; // update number of neighbours
+  lista_vertices* NewlinkNeighbours = (lista_vertices*)malloc((*vetor[i])->neighbours*sizeof(lista_vertices)); 
+  
+  for (int index=0;index<(*vetor[i])->neighbours-1;index++) { // put all old neighbours in the new array
+    NewlinkNeighbours[index] = (*vetor[i])->neighboursLink[index];
+  }
   if (store->next == NULL){ // se só tiver um vértice na lista
     store->next = (struct vertice*)malloc(sizeof(struct vertice));
     store->next->back = (*vetor[i]);
@@ -304,10 +354,14 @@ int AddAresta(lista_vertices** vetor, int vi, int vj,int w, int qtdV){
     putVerticeName(store->next, store->next->nameV);
     store->next->next = NULL;
     store->next->weight = w;
+    NewlinkNeighbours[(*vetor[i])->neighbours-1] = store->next;
+    free((*vetor[i])->neighboursLink);
+    (*vetor[i])->neighboursLink = NewlinkNeighbours;
   } else {
     while (store->next->next!=NULL) { 
       previous = store;
       store = store->next;
+      
     }
     store->next->next = (struct vertice*)malloc(sizeof(struct vertice));
     // printf("vertice name: %i\n", previous->nameV);
@@ -316,7 +370,9 @@ int AddAresta(lista_vertices** vetor, int vi, int vj,int w, int qtdV){
     putVerticeName(store->next->next, vj);
     store->next->next->next = NULL;
     store->next->next->weight = w;
-
+    NewlinkNeighbours[(*vetor[i])->neighbours-1] = store->next->next;
+    free((*vetor[i])->neighboursLink);
+    (*vetor[i])->neighboursLink = NewlinkNeighbours;
   }
   
   // printf("\n\n");
@@ -335,3 +391,29 @@ int AddAresta(lista_vertices** vetor, int vi, int vj,int w, int qtdV){
   // 0 = aresta ja existe
   // 1 = aresta adicionada
 }
+
+
+void Grafo2(lista_vertices** vetor, int qtdV){
+  printf("\n\n");
+  for (int i=0;i<qtdV;i++){
+    printf("[v%i]->", (*vetor[i])->nameV);
+    for(int j=0;j<(*vetor[i])->neighbours;j++){
+      printf("[v%i]%i->", (*vetor[i])->neighboursLink[j]->nameV,(*vetor[i])->visited);
+    }
+    printf("\n\n");
+  }
+}
+
+
+// void Grafo2(lista_vertices** vetor, int qtdV){
+//   printf("\n\n");
+//   for (int i=0;i<qtdV;i++){
+//     printf("[v%i]->", (*vetor[0])->nameV);
+//     printf("[v%i]->", (*vetor[0])->neighboursLink[0]->nameV);
+//     printf("[v%i]->", (*vetor[0])->neighboursLink[0]->neighboursLink[0]->nameV);
+
+//     printf("\n\n");
+//   }
+// }
+
+
