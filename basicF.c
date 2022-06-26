@@ -265,8 +265,8 @@ void Grafo(lista_vertices** vetor, int qtdV){
     printf("\n\n*v%i - n = %i\n",store->nameV,(*vetor[i])->neighbours);
     while (store!=NULL)
     {
-      if (store->next != NULL) printf("[v%i]==>", store->nameV);
-      else printf("[v%i]", store->nameV);
+      if (store->next != NULL) printf("[v%i]p(%f)==>", store->nameV,store->weight);
+      else printf("[v%i]p(%f)", store->nameV,store->weight);
       store = store->next;
     }
 
@@ -295,7 +295,7 @@ int ExisteAresta(lista_vertices** vetor, int vi, int vj,double w, int qtdV){
   // -1 = não existe um dos vértices aresta vi->vj
   // 0 = os vértices existem, mas não a aresta
   // 1 = existe a aresta vi->vj, mas não com o peso w
-  // 2 = existe a aresta vi->vj com peso
+  // 2 = existe a aresta vi->vj com peso w
   if (Evertice(vetor, vi, qtdV) == 0 || Evertice(vetor, vj, qtdV) == 0) return -1;
   lista_vertices store = (lista_vertices)malloc(sizeof(struct vertice));
   int i= -1;
@@ -324,7 +324,7 @@ int Eadj(lista_vertices** vetor, int vi, int vj, int qtdV){
   return 0;
 }
 
-int AddAresta(lista_vertices** vetor, int vi, int vj,int w, int qtdV){
+int AddAresta(lista_vertices** vetor, int vi, int vj,double w, int qtdV){
   if(Evertice(vetor,vi,qtdV) == 0 || Evertice(vetor, vj, qtdV) == 0) return -1;
   if(Evertice(vetor,vi,qtdV) == 1 && Evertice(vetor, vj, qtdV) == 1) {
     if (ExisteAresta(vetor, vi, vj, 0, qtdV) != 0) return 0;
@@ -353,7 +353,8 @@ int AddAresta(lista_vertices** vetor, int vi, int vj,int w, int qtdV){
     store->next->nameV = vj;
     putVerticeName(store->next, store->next->nameV);
     store->next->next = NULL;
-    store->next->weight = w;
+    store->weight = w;
+    store->next->weight = 0.505303404;
     NewlinkNeighbours[(*vetor[i])->neighbours-1] = store->next;
     free((*vetor[i])->neighboursLink);
     (*vetor[i])->neighboursLink = NewlinkNeighbours;
@@ -364,15 +365,18 @@ int AddAresta(lista_vertices** vetor, int vi, int vj,int w, int qtdV){
       
     }
     store->next->next = (struct vertice*)malloc(sizeof(struct vertice));
+    
     // printf("vertice name: %i\n", previous->nameV);
     store->next->next->back = previous->next;
     store->next->next->nameV = vj;
     putVerticeName(store->next->next, vj);
     store->next->next->next = NULL;
-    store->next->next->weight = w;
+    store->next->weight = w;
+    store->next->next->weight = 0.505303404;
     NewlinkNeighbours[(*vetor[i])->neighbours-1] = store->next->next;
     free((*vetor[i])->neighboursLink);
     (*vetor[i])->neighboursLink = NewlinkNeighbours;
+    
   }
   
   // printf("\n\n");
@@ -392,13 +396,86 @@ int AddAresta(lista_vertices** vetor, int vi, int vj,int w, int qtdV){
   // 1 = aresta adicionada
 }
 
+int RemoveAresta(lista_vertices** vetor, int vi, int vj , double w, int qtdV){
+  if (ExisteAresta(vetor, vi, vj, w, qtdV) != 2) {printf("Não foi possível remover aresta!");return 0;}
+  lista_vertices store = (lista_vertices)malloc(sizeof(struct vertice));
+  
+  int i=0;
+  
+  for (i=0;vi!=(*vetor[i])->nameV;i++) store=(*vetor[i]);
+  store=(*vetor[i]); // current
+  
+  store = store->next; // first adj of (*vetor[i])
+  lista_vertices previous = (lista_vertices)malloc(sizeof(struct vertice));
+  previous = (*vetor[i]); // first adj of (*vetor[i])
+
+  
+  while (store->nameV != vj || store->back->weight!=w){
+    store = store->next; //next of adj of (*vetor[i])
+    previous = store->back; // laways 1 step back of store
+    
+  }
+
+  // CHANGING LIST ADJ IN next - START
+  if (store->next == NULL) { // last one of adj
+    previous->next = NULL;
+    previous->weight = 0.505303404;
+  }
+  else{ // previous receive next of store and his weight, and change back of the next of store
+    previous->next = store->next;
+    previous->weight = store->weight;
+    store->next->back = previous;
+  }
+  // CHANGING LIST ADJ IN next - END
+  
+
+  if ((*vetor[i])->neighbours == 1){ // if adj has just 1 element
+    lista_vertices* NewlinkNeighbours = (lista_vertices*)malloc(sizeof(lista_vertices));
+    free((*vetor[i])->neighboursLink);
+    (*vetor[i])->neighboursLink = NewlinkNeighbours;
+    (*vetor[i])->neighbours--;
+    (*vetor[i])->weight = 0.505303404;
+    
+    return 1;
+  }
+
+
+  lista_vertices* NewlinkNeighbours = (lista_vertices*)malloc((*vetor[i])->neighbours*sizeof(lista_vertices)); 
+
+    // for(int j=0;j<(*vetor[i])->neighbours;j++){
+    //   printf("[v%i]->", (*vetor[i])->neighboursLink[j]->nameV);
+    // }
+  // CHANGING LIST ADJ IN neighboursLink - START
+  for (int index=0,indexNew=0;index<(*vetor[i])->neighbours;index++) { // put all old neighbours in the new array
+    // !!!WARNING!!! FALTA ADICIONAR A VERIFICAÇÃO DE PESO TAMBEM COM weightLink
+    
+    if ((*vetor[i])->neighboursLink[index]->nameV != vj) {
+      NewlinkNeighbours[indexNew] = (*vetor[i])->neighboursLink[index];
+      indexNew++;
+    } 
+  }
+  free((*vetor[i])->neighboursLink);
+  (*vetor[i])->neighboursLink = NewlinkNeighbours;
+  // CHANGING LIST ADJ IN neighboursLink - END
+
+
+  (*vetor[i])->neighbours--;
+  
+  
+
+
+  // (*vetor[i])->neighboursLink[i]
+  
+  
+}
+
 
 void Grafo2(lista_vertices** vetor, int qtdV){
   printf("\n\n");
   for (int i=0;i<qtdV;i++){
     printf("[v%i]->", (*vetor[i])->nameV);
     for(int j=0;j<(*vetor[i])->neighbours;j++){
-      printf("[v%i]%i->", (*vetor[i])->neighboursLink[j]->nameV,(*vetor[i])->visited);
+      printf("[v%i]->", (*vetor[i])->neighboursLink[j]->nameV);
     }
     printf("\n\n");
   }
