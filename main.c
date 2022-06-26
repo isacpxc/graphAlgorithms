@@ -267,7 +267,7 @@ int main(){
     // lista_vertices** vetor;
     // vetor = create_adjList(qtdV, qtdE, edgesM); // ficar de olho no tipo recebido
     lista_vertices** vetor = create_adjList(qtdV, qtdE, edgesM);
-    // Grafo(vetor, qtdV);  // FUNCTION
+    Grafo(vetor, qtdV);  // FUNCTION
     // Grafo2(vetor, qtdV);
     // printf("Insira o número do vértice: ");
     // int v = 0;
@@ -276,13 +276,16 @@ int main(){
     // printf("%i", ExisteAresta(vetor, 4, 2, 2, qtdV)); //FUNCTION
     // printf("%i", Eadj(vetor, 4, 2,qtdV));
     
-    //AddAresta(vetor, 99, 5, 3, qtdV);
+    AddAresta(vetor, 6, 3, 2, qtdV);
     // qtdE++;
     printf("\n\nDEPOIS=========\n\n");
     // Grafo2(vetor, qtdV);
-    // Grafo(vetor, qtdV);
+    Grafo(vetor, qtdV);
+    RemoveAresta(vetor, 2, 4, 2, qtdV);
+    // printf("\n\nDEPOISrem=========\n\n");
+    Grafo(vetor, qtdV);
     // teste((vetor[0]));
-    DFS((*vetor[0]));
+    // DFS((*vetor[0]));
     system("pause");
     return 0;
 }
