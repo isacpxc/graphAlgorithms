@@ -4,7 +4,7 @@ EVertice: YES
 ExisteAresta: YES
 Eadj: YES
 AddAresta: YES
-RemoveAresta: NO
+RemoveAresta: YES // !!!WARNING!!! FALTA ADICIONAR A VERIFICAÇÃO DE PESO TAMBEM COM weightLink - ISSO APÓS CRIÁ-LO
 MudaPeso: NO
 ImprimeGrafo: NO
 RemoveGrafo: NO
@@ -19,7 +19,7 @@ MatrizAdj: NO
 ImprimeMatriz: NO
 Conexo: NO 
 
-DFS: NO
+DFS: YES // SERÁ?
 BFS: NO
 
 CaminhoMinimo: NO
