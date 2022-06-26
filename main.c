@@ -157,7 +157,7 @@ int main(){
         if (space_count == 3) space_count = 0;
         if (space_count == 2) {
             c = fgetc(instructions);
-            while (c != ' ' && c!='\n') {
+            while (c != ' ' && c!='\n' && c != EOF) {
                 fprintf(edges_weights, "%c", c);
                 c = fgetc(instructions);
             }
