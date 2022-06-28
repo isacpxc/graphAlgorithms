@@ -1,0 +1,1 @@
+*evitar espaços após inserção de cada linha
