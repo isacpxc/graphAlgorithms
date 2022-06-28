@@ -1,4 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int DFS(struct vertice* v);
+void DFS(struct vertice* v, int* res);
+void BFS(struct vertice* v, int* res);
