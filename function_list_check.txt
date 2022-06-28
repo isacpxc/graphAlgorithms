@@ -9,18 +9,18 @@ MudaPeso: NO
 ImprimeGrafo: NO
 RemoveGrafo: NO
 RecuperaPeso: NO
-GrafoSimples: NO
-EArvore: NO
-EBipartido: NO
-Complemeto: NO
+!GrafoSimples: NO
+!EArvore: NO
+!EBipartido: NO
+!Complemeto: NO
 Adjacencia: NO
 Incidencia: NO
 MatrizAdj: NO
 ImprimeMatriz: NO
-Conexo: NO 
+!Conexo: NO 
 
-DFS: YES // SERÁ?
-BFS: NO
+DFS: YES  // FALTA FAZER RETORNAR O VETOR DINÂMICO
+BFS: YES  // FALTA FAZER RETORNAR O VETOR DINÂMICO
 
 CaminhoMinimo: NO
 CustoMinimo: NO
