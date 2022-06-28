@@ -104,10 +104,10 @@ int main(){
     /*CATCHING NUMBER OF EDGES - START*/
     do {  // this will catch how many decimal places the number has
         c = fgetc(instructions);
-        if (c == ' ') cont++;
+        if (c == ' ' || c == '\n') cont++;
         if (cont == 2 && c!=' ') steps++;
         if (cont < 2) before++;
-    } while(cont < 3);
+    } while(cont < 3 );
 
     char nE[steps];
     before++;
@@ -190,8 +190,8 @@ int main(){
     // inserindo arestas na matriz
     for (int count_columns = 0;count_columns < qtdE;count_columns++){
         for (;space_count<2;space_count++){
-            
-            while (e != ' ' && e!='\n'){ // to the position of char 1 before -> after ' '
+            // int teste = (int)e;
+            while (e != ' ' && e!='\n' /* && teste!=-1 */){ // to the position of char 1 before -> after ' '
                 current_position++;
                 steps++;
                 e = fgetc(edges_instructions);
@@ -275,17 +275,29 @@ int main(){
     // printf("%i",Evertice(vetor, 3, qtdV)); // FUNCTION
     // printf("%i", ExisteAresta(vetor, 4, 2, 2, qtdV)); //FUNCTION
     // printf("%i", Eadj(vetor, 4, 2,qtdV));
-    
-    AddAresta(vetor, 6, 3, 2, qtdV);
+    // setQtdV(qtdV);
+    // AddAresta(vetor, 6, 3, 2, qtdV);
     // qtdE++;
     printf("\n\nDEPOIS=========\n\n");
     // Grafo2(vetor, qtdV);
-    Grafo(vetor, qtdV);
-    RemoveAresta(vetor, 2, 4, 2, qtdV);
+    // Grafo(vetor, qtdV);
+    //RemoveAresta(vetor, 2, 4, 2, qtdV);
     // printf("\n\nDEPOISrem=========\n\n");
-    Grafo(vetor, qtdV);
+    // Grafo(vetor, qtdV);
     // teste((vetor[0]));
-    // DFS((*vetor[0]));
+    int* dfs_res = (int*)malloc(qtdV*sizeof(int));
+    // DFS((*vetor[0]), dfs_res); // don't trust in qtdV
+    // for (int i=0;i<qtdV;i++){
+    //     printf("$v%i$ ", dfs_res[i]);
+    // }
+    // printf("\n\n");
+    // BFS((*vetor[0]),dfs_res);
+    // printf("\n\n");
+    // for (int i=0;i<qtdV;i++){
+    //     printf("$v%i$ ", dfs_res[i]);
+    // }
+    // printf("\n\n");
+
     system("pause");
     return 0;
 }
