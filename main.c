@@ -6,8 +6,10 @@
 #include <stdbool.h>
 #include "basicF.h"
 #include "search.h"
+#include "helpers.h"
+#include "pathM.h"
 
-
+int* allVertices;
 
 int main(){
 
@@ -187,6 +189,9 @@ int main(){
     e = fgetc(edges_instructions);
     int current_number = 0;
     int disconnect=0;
+    int indice=0;
+    allVertices = (int*)malloc(qtdV*sizeof(int));
+    for (int i=0;i<qtdV;i++) allVertices[i]=-1;
     // inserindo arestas na matriz
     for (int count_columns = 0;count_columns < qtdE;count_columns++){
         for (;space_count<2;space_count++){
@@ -205,7 +210,10 @@ int main(){
             for (i = 0;i<steps;i++){
                 current_number+= pow(10, steps-i-1)*((int)fgetc(edges_instructions)-48);
             }
-            
+            if (verifyPosition(current_number,allVertices,qtdV) == 0) {
+                allVertices[indice] = current_number;
+                indice++;
+            }
             
             if (!disconnect) edgesM[space_count][count_columns] = current_number;
             else {space_count++;count_columns--;current_position--;}
@@ -267,7 +275,7 @@ int main(){
     // lista_vertices** vetor;
     // vetor = create_adjList(qtdV, qtdE, edgesM); // ficar de olho no tipo recebido
     lista_vertices** vetor = create_adjList(qtdV, qtdE, edgesM);
-    Grafo(vetor, qtdV);  // FUNCTION
+    // Grafo(vetor);  // FUNCTION
     // Grafo2(vetor, qtdV);
     // printf("Insira o número do vértice: ");
     // int v = 0;
@@ -278,26 +286,32 @@ int main(){
     // setQtdV(qtdV);
     // AddAresta(vetor, 6, 3, 2, qtdV);
     // qtdE++;
-    printf("\n\nDEPOIS=========\n\n");
+    // printf("\n\nDEPOIS=========\n\n");
     // Grafo2(vetor, qtdV);
-    // Grafo(vetor, qtdV);
+    // Grafo(vetor);
     //RemoveAresta(vetor, 2, 4, 2, qtdV);
     // printf("\n\nDEPOISrem=========\n\n");
     // Grafo(vetor, qtdV);
     // teste((vetor[0]));
-    int* dfs_res = (int*)malloc(qtdV*sizeof(int));
+    // int* dfs_res = (int*)malloc(qtdV*sizeof(int));
     // DFS((*vetor[0]), dfs_res); // don't trust in qtdV
     // for (int i=0;i<qtdV;i++){
     //     printf("$v%i$ ", dfs_res[i]);
     // }
+    // setVisited(vetor, qtdV);
     // printf("\n\n");
     // BFS((*vetor[0]),dfs_res);
     // printf("\n\n");
     // for (int i=0;i<qtdV;i++){
     //     printf("$v%i$ ", dfs_res[i]);
     // }
+    // setVisited(vetor, qtdV);
     // printf("\n\n");
 
+    CustoMinimo(vetor, 0);
+    // CaminhoMinimo(vetor,0,3);
+    
+    // printf("oi %i",Evertice(vetor, 7));
     system("pause");
     return 0;
 }

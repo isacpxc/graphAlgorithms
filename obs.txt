@@ -1,1 +1,3 @@
 *evitar espaços após inserção de cada linha
+
+*reslver problema de t=0 em search.c

@@ -11,12 +11,15 @@ struct vertice{
   int neighbours;
   struct vertice** neighboursLink;
   double* weightLink ;
+  double dist;
+  struct vertice* dad;
 };
 
 int t = 0;
+int first = 0;
 //MAKE RETURN DINAMIC ARRAY
 void DFS(struct vertice* v, int* res){
-  
+  if (t==0) first = v->nameV;
   res[t] = v->nameV;
   t++;
   // printf("[v%i]", v->nameV);
@@ -31,10 +34,11 @@ void DFS(struct vertice* v, int* res){
     
     
   }
-  
+  if (first == v->nameV) t = 0;
 }
 
 void BFS(struct vertice* v,int* res){
+  if (t==0) first = v->nameV;
   v->visited = 1;
   if (t==0){/* printf("[v%i]", v->nameV); */res[t] = v->nameV;t++;}
   for (int i=0;i<v->neighbours;i++){
@@ -56,4 +60,5 @@ void BFS(struct vertice* v,int* res){
   for (int i =0;i<v->neighbours;i++){
     if (v->neighboursLink[i]->visited == 0) BFS(v->neighboursLink[i], res);
   }
+  if (first == v->nameV) t = 0;
 }
