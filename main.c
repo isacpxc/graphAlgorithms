@@ -190,6 +190,7 @@ int main(){
     int current_number = 0;
     int disconnect=0;
     int indice=0;
+    
     allVertices = (int*)malloc(qtdV*sizeof(int));
     for (int i=0;i<qtdV;i++) allVertices[i]=-1;
     // inserindo arestas na matriz
@@ -232,22 +233,30 @@ int main(){
     }
 
     // inserindo pesos na matriz
+    int neg=0;
     current_position = 0;
     steps = 0;
     e = fgetc(edges_weights);
     for (int count_line=0;count_line<qtdE;count_line++){
         while (e !='\n'){ // to the position of char 1 before -> after ' '                current_position++;
+            if (e=='-') neg++;
+            else steps++;
             current_position++;
-            steps++;
             e = fgetc(edges_weights);
         }
 
         current_number = 0;
         fseek(edges_weights, (current_position-steps), SEEK_SET);
         e = fgetc(edges_weights);
+        int cont=0;
         for (i = 0;i<steps;i++){
             current_number+= pow(10, steps-i-1)*((int)e-48);
+            e = fgetc(edges_weights);
+            cont++;
         }
+        fseek(edges_weights, (current_position-cont), SEEK_SET);
+        if (neg) current_number*=-1;
+        neg=0;
         edgesM[2][count_line] = current_number;
 
         current_position++;
@@ -258,15 +267,6 @@ int main(){
         current_position++;
     }
 
-    // imprimir matriz
-    // for (i=0;i<3;i++){
-    //     for (int j=0;j<qtdE;j++){
-    //         printf("%0.2f ", edgesM[i][j]);
-    //     }
-    //     printf("%c",'\n');
-    // }
-    
-
 
     // CATCHING ALL EDGES VALUES IN MATRIX - END
     
@@ -275,43 +275,13 @@ int main(){
     // lista_vertices** vetor;
     // vetor = create_adjList(qtdV, qtdE, edgesM); // ficar de olho no tipo recebido
     lista_vertices** vetor = create_adjList(qtdV, qtdE, edgesM);
-    // Grafo(vetor);  // FUNCTION
-    // Grafo2(vetor, qtdV);
-    // printf("Insira o número do vértice: ");
-    // int v = 0;
-    // scanf("%d",&v);
-    // printf("%i",Evertice(vetor, 3, qtdV)); // FUNCTION
-    // printf("%i", ExisteAresta(vetor, 4, 2, 2, qtdV)); //FUNCTION
-    // printf("%i", Eadj(vetor, 4, 2,qtdV));
-    // setQtdV(qtdV);
-    // AddAresta(vetor, 6, 3, 2, qtdV);
-    // qtdE++;
-    // printf("\n\nDEPOIS=========\n\n");
-    // Grafo2(vetor, qtdV);
-    // Grafo(vetor);
-    //RemoveAresta(vetor, 2, 4, 2, qtdV);
-    // printf("\n\nDEPOISrem=========\n\n");
-    // Grafo(vetor, qtdV);
-    // teste((vetor[0]));
-    // int* dfs_res = (int*)malloc(qtdV*sizeof(int));
-    // DFS((*vetor[0]), dfs_res); // don't trust in qtdV
-    // for (int i=0;i<qtdV;i++){
-    //     printf("$v%i$ ", dfs_res[i]);
-    // }
-    // setVisited(vetor, qtdV);
-    // printf("\n\n");
-    // BFS((*vetor[0]),dfs_res);
-    // printf("\n\n");
-    // for (int i=0;i<qtdV;i++){
-    //     printf("$v%i$ ", dfs_res[i]);
-    // }
-    // setVisited(vetor, qtdV);
-    // printf("\n\n");
+    Grafo(vetor);
+    RemoveAresta(vetor, 0, 2, 9);
+    RemoveAresta(vetor, 2, 0, 9);
+    printf("\n\nREMOÇÃO:\n\n");
+    Grafo(vetor);
 
-    CustoMinimo(vetor, 0);
-    // CaminhoMinimo(vetor,0,3);
     
-    // printf("oi %i",Evertice(vetor, 7));
     system("pause");
     return 0;
 }
