@@ -44,16 +44,10 @@ void BFS(struct vertice* v,int* res){
   for (int i=0;i<v->neighbours;i++){
     if (v->neighboursLink[i]->visited == -1)
     {  /* if (v->neighboursLink[i]->visited == -1) printf("[v%i]", v->neighboursLink[i]->nameV); */
-      if (i==0){
-        
+
         res[t] = v->neighboursLink[i]->nameV;
         v->neighboursLink[i]->visited = 0;
         t++;
-      } else {
-        v->neighboursLink[i]->visited = 0;
-        res[t] = v->neighboursLink[i]->nameV;
-        t++;
-      }
     }
   }
 
