@@ -32,6 +32,10 @@ O código-fonte está modularizado em vários arquivos para organizar melhor as 
 
 ## Como Compilar e Executar
 
+## OBSERVAÇÃO
+
+- evitar espaços após inserção de cada linha
+
 1.  **Pré-requisitos**:
 
       * É necessário ter um compilador C (como o GCC) instalado.
